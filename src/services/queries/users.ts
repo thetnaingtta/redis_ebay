@@ -1,8 +1,7 @@
 import type { CreateUserAttrs } from '$services/types';
 import { genId } from '$services/utils';
 import { client } from '$services/redis';
-import { userKey, usernamesUniqueKey, usernamesKey } from '$services/keys';
-import { attr } from 'svelte/internal';
+import { userKey, usernamesKey } from '$services/keys';
 
 export const getUserByUsername = async (username: string) => {
 	// use the username arg to check userid with username sorted set
@@ -35,12 +34,14 @@ export const createUser = async (attrs: CreateUserAttrs) => {
 
 	const id = genId();
 
-	await client.hSet(userKey(id), serialize(attrs));
-	await client.sAdd(usernamesUniqueKey(), attrs.username);
-	await client.zAdd(usernamesKey(), {
-		value: attrs.username,
-		score: parseInt(id, 16)
-	});
+    await Promise.all([
+        client.hSet(userKey(id), serialize(attrs)),
+        client.zAdd(usernamesKey(), {
+            value: attrs.username,
+            score: parseInt(id, 16)
+        })
+    ]);
+
 	return id;
 };
 

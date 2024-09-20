@@ -1,5 +1,5 @@
 import { client } from "$services/redis";
-import { itemKey, userLikesKey } from "$services/keys";
+import { itemsKey, userLikesKey } from "$services/keys";
 import { getItems } from "./items";
 
 export const userLikesItem = async (itemId: string, userId: string) => {
@@ -16,7 +16,7 @@ export const likeItem = async (itemId: string, userId: string) => {
     const inserted = await client.sAdd(userLikesKey(userId), itemId);
 
     if (inserted) {
-        return client.hIncrBy(itemKey(itemId), 'likes', 1);
+        return client.hIncrBy(itemsKey(itemId), 'likes', 1);
     }
 };
 
@@ -24,7 +24,7 @@ export const unlikeItem = async (itemId: string, userId: string) => {
    const removed = await client.sRem(userLikesKey(userId), itemId);
 
    if (removed) {
-       return client.hIncrBy(itemKey(itemId), 'likes', -1);
+       return client.hIncrBy(itemsKey(itemId), 'likes', -1);
    }
 };
 

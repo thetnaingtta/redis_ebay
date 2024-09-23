@@ -5,6 +5,8 @@ export const sessionsKey = (sessionId: string) => `sessions#${sessionId}`;
 export const itemsKey = (itemId: string) => `item#${itemId}`;
 export const itemByViewsKey = () => 'items:byviews';
 export const itemsByEndingAtKey = () => 'items:endingAt';
+export const itemsViewsKey = (itemId: string) => `items:views#${itemId}`;
+export const bidHistoryKey = (itemId: string) => `history#${itemId}`;
 
 // user
 export const userLikesKey = (userId: string) => `users:likes#${userId}`;

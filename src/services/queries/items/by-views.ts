@@ -20,8 +20,12 @@ export const itemsByViews = async (order: 'DESC' | 'ASC' = 'DESC', offset = 0, c
 	const items = [];
 	while (results.length) {
 		const [id, name, views, endingAt, imageUrl, price, ...rest] = results;
-		const item = deserialize(id, { name, views, endingAt, imageUrl, price });
-		items.push(item);
+
+        if(views >0) {
+           const item = deserialize(id, { name, views, endingAt, imageUrl, price });
+		    items.push(item); 
+        }
+		
         results = rest;
 	}
 
